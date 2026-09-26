@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-panel">
+    <h2>{{ opportunity.title }}</h2>
+    <div class="meta-line">
+        <span class="badge">{{ opportunity.category.name if opportunity.category else 'Non précisée' }}</span>
+        {% if opportunity.country_scope %}<span class="badge success">{{ opportunity.country_scope }}</span>{% endif %}
+        {% if opportunity.deadline %}<span class="badge">Date limite : {{ opportunity.deadline.strftime('%d/%m/%Y') }}</span>{% endif %}
+    </div>
+    <p><strong>Organisateur :</strong> {{ opportunity.organizer or 'Non précisé' }}</p>
+    <p>{{ opportunity.description }}</p>
+    <div class="actions-inline">
+        <a href="{{ opportunity.link }}" target="_blank" rel="noopener noreferrer">Voir l'offre originale</a>
+        {% if current_user.is_authenticated %}
+        <form method="POST" action="{{ url_for('main.toggle_favorite', opp_id=opportunity.id) }}" class="inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {% if opportunity in current_user.favorite_opportunities %}
+                <button type="submit" class="danger">Retirer des favoris</button>
+            {% else %}
+                <button type="submit" class="success">Ajouter aux favoris</button>
+            {% endif %}
+        </form>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

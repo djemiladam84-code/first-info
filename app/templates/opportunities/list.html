@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Toutes les opportunités</h2>
+
+<form method="GET" class="filters">
+    <input type="text" name="q" placeholder="Rechercher..." value="{{ search }}">
+    <select name="categorie">
+        <option value="">Toutes les catégories</option>
+        {% for cat in categories %}
+        <option value="{{ cat.id }}" {% if cat.id == selected_category %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+    </select>
+    <select name="pays">
+        <option value="">Tous les pays et zones</option>
+        {% for country in countries %}
+        <option value="{{ country }}" {% if country == selected_country %}selected{% endif %}>{{ country }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Rechercher</button>
+</form>
+
+<ul class="card-list">
+{% for opp in opportunities %}
+    <li class="card">
+        <a class="card-title" href="{{ url_for('main.opportunity_detail', opp_id=opp.id) }}">{{ opp.title }}</a>
+        <div class="meta-line">
+            <span class="badge">{{ opp.category.name if opp.category else 'Sans catégorie' }}</span>
+            {% if opp.country_scope %}<span class="badge success">{{ opp.country_scope }}</span>{% endif %}
+            {% if opp.deadline %}<span class="badge">{{ opp.deadline.strftime('%d/%m/%Y') }}</span>{% endif %}
+        </div>
+        <p>{{ opp.description[:140] }}{% if opp.description|length > 140 %}...{% endif %}</p>
+    </li>
+{% else %}
+    <li class="card">Aucune opportunité trouvée.</li>
+{% endfor %}
+</ul>
+
+{% if pagination.pages > 1 %}
+<nav class="page-nav" aria-label="Pagination">
+    {% if pagination.has_prev %}
+    <a href="{{ url_for('main.opportunity_list', q=search, categorie=selected_category, pays=selected_country, page=pagination.prev_num) }}">Précédente</a>
+    {% endif %}
+    <span>Page {{ pagination.page }} / {{ pagination.pages }}</span>
+    {% if pagination.has_next %}
+    <a href="{{ url_for('main.opportunity_list', q=search, categorie=selected_category, pays=selected_country, page=pagination.next_num) }}">Suivante</a>
+    {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

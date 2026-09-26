@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-panel" style="margin-bottom: 1.5rem;">
+    <h2>Bienvenue sur First Info</h2>
+    <p>La plateforme des opportunités pour les jeunes africains.</p>
+    <a href="{{ url_for('main.opportunity_list') }}">Voir toutes les opportunités</a>
+</section>
+
+<h3>Dernières opportunités</h3>
+<ul class="card-list">
+{% for opp in opportunities %}
+    <li class="card">
+        <a class="card-title" href="{{ url_for('main.opportunity_detail', opp_id=opp.id) }}">{{ opp.title }}</a>
+        <div class="meta-line">
+            <span class="badge">{{ opp.category.name if opp.category else 'Sans catégorie' }}</span>
+            {% if opp.country_scope %}<span class="badge success">{{ opp.country_scope }}</span>{% endif %}
+        </div>
+    </li>
+{% else %}
+    <li class="card">Aucune opportunité pour l'instant.</li>
+{% endfor %}
+</ul>
+{% endblock %}

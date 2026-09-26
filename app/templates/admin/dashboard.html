@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tableau de bord admin</h2>
+<p>{{ approved_count }} opportunités publiées.</p>
+<a href="{{ url_for('admin.new_opportunity') }}">+ Ajouter une opportunité</a>
+<a href="{{ url_for('admin.ai_collection') }}">🤖 Collecte automatique</a>
+
+<h3>En attente de validation ({{ pending|length }})</h3>
+<ul>
+{% for opp in pending %}
+    <li>
+        {{ opp.title }} ({{ opp.source }})
+        <form method="POST" action="{{ url_for('admin.approve_opportunity', opp_id=opp.id) }}" style="display:inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Valider</button>
+        </form>
+        <form method="POST" action="{{ url_for('admin.reject_opportunity', opp_id=opp.id) }}" style="display:inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Rejeter</button>
+        </form>
+        <form method="POST" action="{{ url_for('admin.delete_opportunity', opp_id=opp.id) }}" style="display:inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Supprimer</button>
+        </form>
+        <form method="POST" action="{{ url_for('admin.delete_opportunity', opp_id=opp.id) }}" class="inline" data-confirm="Supprimer définitivement cette opportunité ?">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="danger">Supprimer</button>
+        </form>
+    </li>
+{% else %}
+    <li>Rien en attente.</li>
+{% endfor %}
+</ul>
+{% endblock %}

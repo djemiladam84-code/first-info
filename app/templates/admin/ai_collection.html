@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Collecte automatique par IA</h2>
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <p>
+        <label>Requête de recherche</label>
+        <input type="text" name="query" value="bourses et stages pour étudiants africains 2026" style="width:400px">
+    </p>
+    <button type="submit">Lancer la recherche</button>
+</form>
+<p><em>Ça peut prendre 30 secondes à 1 minute, l'IA fait de vraies recherches web.</em></p>
+{% endblock %}

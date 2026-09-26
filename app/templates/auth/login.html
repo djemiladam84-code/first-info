@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Connexion</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <p>{{ form.email.label }} {{ form.email() }}</p>
+    <p>{{ form.password.label }} {{ form.password() }}</p>
+    {{ form.submit() }}
+</form>
+{% with messages = get_flashed_messages() %}
+  {% for message in messages %}
+    <p>{{ message }}</p>
+  {% endfor %}
+{% endwith %}
+{% endblock %}
