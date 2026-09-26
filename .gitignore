@@ -1,1 +1,6 @@
+venv/
 .env
+*.db
+__pycache__/
+instance/
+migrations/__pycache__/
